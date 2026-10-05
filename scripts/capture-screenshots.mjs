@@ -26,14 +26,10 @@ for (const site of SITES) {
     });
     const page = await ctx.newPage();
     await page.goto(site.url, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => {});
-    // Stäng eventuella cookie-banners
-    for (const label of [/acceptera/i, /godkänn/i, /accept/i, /ok/i]) {
-      const btn = page.getByRole('button', { name: label }).first();
-      if (await btn.isVisible().catch(() => false)) {
-        await btn.click().catch(() => {});
-        break;
-      }
-    }
+    // Stäng eventuella cookie-banners (bara knappar vars text BÖRJAR med ett godkänn-ord)
+    const consent = page.getByRole('button', { name: /^(acceptera|godkänn|tillåt|accept|allow)/i }).first();
+    if (await consent.isVisible().catch(() => false)) await consent.click().catch(() => {});
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(2500);
     const png = await page.screenshot({ type: 'png' });
     const out = `public/images/${site.name}-${v.suffix}.webp`;
