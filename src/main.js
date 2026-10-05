@@ -10,7 +10,7 @@ import { reduceMotion, finePointer } from './js/env.js';
 import { runIntro } from './js/intro.js';
 import { initHeroBg } from './js/hero-bg.js';
 import { initKinetic } from './js/kinetic.js';
-import { initLineReveals, initScrubWords, initServices, initHero } from './js/reveals.js';
+import { initLineReveals, initScrubWords, initServices, initHero, initContactEmail } from './js/reveals.js';
 import { initMarquee } from './js/marquee.js';
 import { initProjects } from './js/projects.js';
 import { initCursor, initMagnetic } from './js/cursor.js';
@@ -69,6 +69,7 @@ const start = () => {
   initScrubWords(gsap, SplitText);
   initServices(gsap);
   initProjects(gsap);
+  initContactEmail(gsap, kinetic);
   if (!reduceMotion) initMarquee(gsap, ScrollTrigger);
   if (finePointer && !reduceMotion) {
     initCursor(gsap);

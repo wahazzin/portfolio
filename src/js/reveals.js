@@ -108,3 +108,21 @@ export function initHero(gsap, kineticGroups, { heroGate }) {
     });
   });
 }
+
+// Kontakt-finalen: mejladressens bokstäver reser sig i olika takt när man scrollar fram.
+export function initContactEmail(gsap, kineticGroups) {
+  if (reduceMotion) return;
+  const email = document.querySelector('.contact__email');
+  if (!email) return;
+  const chars = kineticGroups.filter((g) => email.contains(g.el)).flatMap((g) => g.chars.map((c) => c.node));
+  gsap.fromTo(
+    chars,
+    { yPercent: 105 },
+    {
+      yPercent: 0,
+      ease: 'none',
+      stagger: { each: 0.04, from: 'random' },
+      scrollTrigger: { trigger: email, start: 'top 95%', end: 'bottom 75%', scrub: 0.8 },
+    }
+  );
+}

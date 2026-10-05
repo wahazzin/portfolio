@@ -29,7 +29,8 @@ export function initKinetic(gsap) {
     const min = Number(el.dataset.kineticMin || 400);
     const chars = splitChars(el).map((node) => ({ node, w: min, lift: 0 }));
     // boost: 0..1 extra vikt för hela gruppen (styrs av intro/scroll)
-    return { el, min, chars, boost: 0, visible: false };
+    // wave: på touch-enheter (ingen muspekare) rullar en mjuk viktvåg istället
+    return { el, min, chars, boost: 0, visible: false, wave: 'kineticWave' in el.dataset };
   });
 
   const io = new IntersectionObserver((entries) => {
@@ -55,14 +56,19 @@ export function initKinetic(gsap) {
     document.documentElement.addEventListener('pointerleave', () => (pointer.active = false));
   }
 
-  const update = () => {
+  let offset = 0; // gemensamt index så vågen fortsätter över flera grupper
+  const update = (time) => {
+    offset = 0;
     for (const g of groups) {
       if (!g.visible) continue;
       const range = MAX - g.min;
       const radius = g.radius || (g.radius = Math.max(180, parseFloat(getComputedStyle(g.el).fontSize) * 1.6));
 
       // 1) läs alla positioner först (en layout per frame)
-      const prox = g.chars.map(({ node }) => {
+      const base = offset;
+      offset += g.chars.length;
+      const prox = g.chars.map(({ node }, i) => {
+        if (!useCursor && g.wave) return (Math.sin(time * 2.4 - (base + i) * 0.45) * 0.5 + 0.5) * 0.5;
         if (!useCursor || !pointer.active) return 0;
         const r = node.getBoundingClientRect();
         const dx = pointer.x - (r.left + r.width / 2);
