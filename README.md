@@ -17,20 +17,30 @@ Du behöver [Node.js](https://nodejs.org) (version 18 eller senare).
 
 ---
 
-## Lägga in skärmdumpar på projekten
+## Skärmdumpar på projekten
 
-Varje projekt har en animerad platshållare tills du lägger in en riktig bild.
+Kunglig Städning och Pizzeria Tavolino visar riktiga skärmdumpar (dator + mobil):
 
-1. Ta en skärmdump av sajten (gärna 1600 × 1000 px, liggande).
-2. Spara den som **.jpg** i mappen `public/images/` med exakt de här namnen:
-   - `kunglig-stadning.jpg`
-   - `mo-stadservice.jpg`
-   - `pizzeria-tavolino.jpg`
-3. Öppna `index.html` och sök efter `SKÄRMDUMP`.
-4. Under varje träff finns en rad som börjar med `<!-- <img`. Ta bort `<!--` i början och `-->` i slutet av just den raden.
-5. Spara och pusha (eller kör `npm run build` lokalt). Klart – platshållaren göms automatiskt bakom bilden.
+```
+public/images/kunglig-stadning-desktop.webp   (1440 × 900)
+public/images/kunglig-stadning-mobile.webp    (390 × 844, sparad i 600 px bredd)
+public/images/pizzeria-tavolino-desktop.webp
+public/images/pizzeria-tavolino-mobile.webp
+```
 
-Tips: komprimera bilden först (t.ex. på [squoosh.app](https://squoosh.app)) så att den blir under ~200 KB.
+**Ta nya skärmdumpar (t.ex. när Tavolino-sidan är klar):**
+
+1. Gå till repot på GitHub → fliken **Actions**.
+2. Klicka på **Capture project screenshots** i listan till vänster.
+3. Klicka **Run workflow** → **Run workflow**.
+4. Efter ca 2 minuter har GitHub sparat nya bilder i `public/images/`.
+5. Hämta dem (`git pull`) och pusha något – då publiceras sidan om med de nya bilderna.
+
+Vilka sajter som fotas står i `scripts/capture-screenshots.mjs`.
+
+**MO Städservice** har ingen publik länk än och visar därför en platshållare.
+När sajten finns: lägg till den i `scripts/capture-screenshots.mjs` (namn `mo-stadservice`), kör steg 1–5,
+och byt platshållaren i `index.html` mot samma `<img>`-block som de andra projekten har.
 
 ---
 
@@ -58,6 +68,9 @@ Saker som **måste kollas innan publicering** är markerade med `TODO` i `index.
 
 **Lägga till ett projekt:** kopiera ett helt `<article class="project" …> … </article>`-block och ändra texterna.
 `--hue` styr färgen på platshållaren (ett tal 0–360).
+
+**Samma fält för alla projekt:** nummer + status (valfri), namn, typ & ort, vad du gjorde, länk (valfri).
+Hitta inte på en status – lämna märket bort om du inte vet.
 
 **Status-märken:** `<span class="badge badge--live">Live</span>` eller `<span class="badge badge--wip">Pågående</span>`.
 
@@ -99,18 +112,22 @@ proffsigt för ett lokalt företag, men ändå djärvt – och det sticker ut fr
 
 ## Rörelse – vad som händer var
 
-- **Intro** (max ~1,8 s): namnet stiger upp bakom masker, räknare till 100, sedan torkas ytan uppåt.
+**Grundregel: läsbarhet går alltid före effekter.** Text göms aldrig igen när man scrollar tillbaka,
+och ingen brödtext tonas ner. "Om mig" börjar i läsbar grå och lyses bara *upp* när man scrollar.
+
+- **Intro** (max ~1,8 s): namnet stiger upp, räknare till 100, sedan torkas ytan uppåt.
   Klick, tangent eller scroll hoppar över. Visas bara första besöket per flik.
-- **Hero:** stort namn med variabel vikt som reagerar på muspekaren (desktop) och på scroll (alla).
-  Bakgrunden är en lätt WebGL-shader som pausar när den inte syns. Saknas WebGL syns en statisk gradient.
-- **Text:** rubriker avslöjas rad för rad bakom masker; stycket "Om mig" tänds ord för ord när man scrollar.
-- **Tjänster:** två rullande band som går snabbare när man scrollar och byter riktning med scrollen.
+- **Hero:** stort namn med variabel vikt som reagerar på muspekaren (desktop).
+  Bakgrunden är en lätt WebGL-shader som pausar när den inte syns.
+- **Text:** mobil = hela stycket tonas in på 0,3 s så fort det kommer in i bild.
+  Desktop = rad för rad bakom masker, klart innan texten når mitten av skärmen.
+- **Tjänster:** rullande band (en rad på mobil) som går snabbare när man scrollar.
 - **Projekt:** på desktop fästs sektionen och korten scrollar i sidled; på mobil vanlig lista.
-  Muspekaren blir en "Visa"-bubbla över projekt med länk.
-- **Kontakt:** mejladressen byggs upp bokstav för bokstav; på mobil rullar en viktvåg genom den.
+  Texten under korten animeras inte alls. Muspekaren blir en "Visa"-bubbla över projekt med länk.
+- **Header:** får mörk, suddig bakgrund när man scrollat. Göms efter 60 px nedåt, visas efter 60 px uppåt.
 
 **Mobil:** shadern renderas i lägre upplösning och 30 fps, ingen custom cursor, ingen mjuk-scroll av touch.
-**Reducerad rörelse** (`prefers-reduced-motion`): ingen intro, ingen mjuk scroll, inga stora rörelser –
+**Reducerad rörelse** (`prefers-reduced-motion`): ingen intro, ingen mjuk scroll, inget rullande band –
 all text syns direkt.
 
 ---

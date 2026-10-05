@@ -27,13 +27,13 @@ export function initCopy() {
         } catch (err) {}
         ta.remove();
       }
-      label.textContent = ok ? 'Kopierad!' : value;
-      if (status) status.textContent = ok ? `${value} är kopierad.` : `Kopiera adressen: ${value}`;
+      label.textContent = ok ? 'Mejladress kopierad' : value;
+      if (status) status.textContent = ok ? `Mejladressen ${value} är kopierad.` : `Kopiera adressen: ${value}`;
       clearTimeout(btn._t);
       btn._t = setTimeout(() => {
         label.textContent = original;
         if (status) status.textContent = '';
-      }, 2400);
+      }, 2000);
     });
   });
 }

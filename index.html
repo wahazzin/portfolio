@@ -87,9 +87,8 @@
         </h1>
 
         <div class="hero__bottom">
-          <p class="hero__intro" data-reveal-lines>
-            Jag bygger hemsidor och automatisering för småföretag i Malmö – så att fler hittar dig
-            och du lägger mindre tid på det tråkiga.
+          <p class="hero__intro">
+            Jag bygger hemsidor, Google Ads och automatisering för småföretag i Malmö.
           </p>
           <a class="btn" href="#kontakt" data-magnetic>
             <span class="btn__text">Hör av dig</span>
@@ -165,19 +164,21 @@
               </p>
             </div>
 
+            <!--
+              Varje projekt har samma fält i samma ordning:
+              nummer + status (valfri) · namn · typ & ort · vad jag gjorde · länk (valfri).
+              Skärmdumpar: public/images/<namn>-desktop.webp (1440×900) och <namn>-mobile.webp (390×844).
+              Nya skärmdumpar: kör "Capture project screenshots" under fliken Actions på GitHub.
+            -->
+
             <!-- ---------- PROJEKT 1: Kunglig Städning ---------- -->
-            <article class="project" data-project style="--hue: 42">
-              <a class="project__media" href="https://kungligstadning.se" target="_blank" rel="noopener"
-                 data-cursor="Visa">
+            <article class="project" data-project>
+              <a class="project__media" href="https://kungligstadning.se" target="_blank" rel="noopener" data-cursor="Visa">
                 <span class="sr-only">Besök kungligstadning.se (öppnas i ny flik)</span>
-                <div class="project__placeholder" aria-hidden="true">
-                  <span class="project__ghost">Kunglig<br />Städning</span>
-                </div>
-                <!--
-                  SKÄRMDUMP: lägg bilden i public/images/kunglig-stadning.jpg
-                  och ta bort kommentar-tecknen runt raden nedan.
-                -->
-                <!-- <img class="project__img" src="/images/kunglig-stadning.jpg" alt="Skärmdump av kungligstadning.se" width="1600" height="1000" loading="lazy" decoding="async" /> -->
+                <img class="project__img" src="/images/kunglig-stadning-desktop.webp" alt="" width="1440" height="900" loading="lazy" decoding="async" />
+                <span class="project__phone" aria-hidden="true">
+                  <img src="/images/kunglig-stadning-mobile.webp" alt="" width="600" height="1298" loading="lazy" decoding="async" />
+                </span>
               </a>
               <div class="project__info">
                 <div class="project__row">
@@ -192,42 +193,34 @@
               </div>
             </article>
 
-            <!-- ---------- PROJEKT 2: MO Städservice ---------- -->
+            <!-- ---------- PROJEKT 2: MO Städservice (ingen publik länk än – platshållare) ---------- -->
             <article class="project" data-project style="--hue: 168">
               <div class="project__media">
                 <div class="project__placeholder" aria-hidden="true">
                   <span class="project__ghost">MO<br />Städservice</span>
                 </div>
-                <!--
-                  SKÄRMDUMP: lägg bilden i public/images/mo-stadservice.jpg
-                  och ta bort kommentar-tecknen runt raden nedan.
-                -->
-                <!-- <img class="project__img" src="/images/mo-stadservice.jpg" alt="Skärmdump av MO Städservices hemsida" width="1600" height="1000" loading="lazy" decoding="async" /> -->
               </div>
               <div class="project__info">
                 <div class="project__row">
                   <span class="project__num">02</span>
-                  <!-- TODO: status okänd. Lägg till t.ex. <span class="badge badge--live">Live</span> när det är bekräftat. -->
+                  <!-- TODO: status okänd. Lägg till <span class="badge badge--live">Live</span> när det är bekräftat. -->
                 </div>
                 <h3 class="project__title">MO Städservice</h3>
                 <p class="project__kind">Städfirma</p>
-                <!-- TODO: bekräfta texten nedan. Länk okänd: lägg till en <a class="project__link"> när adressen finns. -->
+                <!-- TODO: bekräfta texten nedan. Länk okänd: lägg till <a class="project__link" href="…">…</a> när adressen finns. -->
                 <p class="project__text">Byggde hemsidan från grunden.</p>
               </div>
             </article>
 
             <!-- ---------- PROJEKT 3: Pizzeria Tavolino ---------- -->
-            <article class="project" data-project style="--hue: 8">
-              <div class="project__media">
-                <div class="project__placeholder" aria-hidden="true">
-                  <span class="project__ghost">Pizzeria<br />Tavolino</span>
-                </div>
-                <!--
-                  SKÄRMDUMP: lägg bilden i public/images/pizzeria-tavolino.jpg
-                  och ta bort kommentar-tecknen runt raden nedan.
-                -->
-                <!-- <img class="project__img" src="/images/pizzeria-tavolino.jpg" alt="Skärmdump av Pizzeria Tavolinos beställningssida" width="1600" height="1000" loading="lazy" decoding="async" /> -->
-              </div>
+            <article class="project" data-project>
+              <a class="project__media" href="https://tavolino.yassin-dev.workers.dev" target="_blank" rel="noopener" data-cursor="Visa">
+                <span class="sr-only">Se förhandsvisning av Pizzeria Tavolinos beställningssida (öppnas i ny flik)</span>
+                <img class="project__img" src="/images/pizzeria-tavolino-desktop.webp" alt="" width="1440" height="900" loading="lazy" decoding="async" />
+                <span class="project__phone" aria-hidden="true">
+                  <img src="/images/pizzeria-tavolino-mobile.webp" alt="" width="600" height="1298" loading="lazy" decoding="async" />
+                </span>
+              </a>
               <div class="project__info">
                 <div class="project__row">
                   <span class="project__num">03</span>
@@ -238,6 +231,7 @@
                 <p class="project__text">
                   Bygger en beställningssida där kunderna beställer direkt, med en skärm i köket för nya beställningar.
                 </p>
+                <a class="project__link" href="https://tavolino.yassin-dev.workers.dev" target="_blank" rel="noopener">Se förhandsvisning</a>
               </div>
             </article>
           </div>
@@ -255,12 +249,12 @@
         </a>
 
         <div class="contact__actions">
-          <button class="btn btn--ghost" type="button" data-copy="wahazzin@gmail.com" data-magnetic>
-            <span class="btn__text">Kopiera mejladressen</span>
-          </button>
           <a class="btn" href="mailto:wahazzin@gmail.com" data-magnetic>
             <span class="btn__text">Skicka ett mejl</span>
           </a>
+          <button class="btn btn--ghost" type="button" data-copy="wahazzin@gmail.com" data-magnetic>
+            <span class="btn__text">Kopiera mejladressen</span>
+          </button>
           <!--
             TELEFON (valfritt): ta bort kommentar-tecknen och skriv in numret.
             <a class="btn btn--ghost" href="tel:+46700000000" data-magnetic><span class="btn__text">070-000 00 00</span></a>
