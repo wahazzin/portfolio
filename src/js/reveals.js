@@ -18,6 +18,7 @@ export function initLineReveals(gsap, SplitText, { heroGate }) {
       type: 'lines',
       mask: 'lines',
       linesClass: 'line',
+      aria: 'none', // <p> får inte ha aria-label; texten är ändå läsbar
       autoSplit: true,
       onSplit(self) {
         show(el);
@@ -40,10 +41,10 @@ export function initScrubWords(gsap, SplitText) {
   document.querySelectorAll('[data-scrub-words]').forEach((el) => {
     show(el);
     if (reduceMotion) return;
-    const split = SplitText.create(el, { type: 'words', wordsClass: 'word' });
+    const split = SplitText.create(el, { type: 'words', wordsClass: 'word', aria: 'none' });
     gsap.fromTo(
       split.words,
-      { opacity: 0.16 },
+      { opacity: 0.4 }, // 0.4 = minst 3:1 kontrast även innan ordet "tänts"
       {
         opacity: 1,
         ease: 'none',
