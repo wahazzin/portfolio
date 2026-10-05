@@ -28,7 +28,7 @@ Varje projekt har en animerad platshållare tills du lägger in en riktig bild.
    - `pizzeria-tavolino.jpg`
 3. Öppna `index.html` och sök efter `SKÄRMDUMP`.
 4. Under varje träff finns en rad som börjar med `<!-- <img`. Ta bort `<!--` i början och `-->` i slutet av just den raden.
-5. Spara, kör `npm run build` igen. Klart – platshållaren göms automatiskt bakom bilden.
+5. Spara och pusha (eller kör `npm run build` lokalt). Klart – platshållaren göms automatiskt bakom bilden.
 
 Tips: komprimera bilden först (t.ex. på [squoosh.app](https://squoosh.app)) så att den blir under ~200 KB.
 
@@ -63,14 +63,21 @@ Saker som **måste kollas innan publicering** är markerade med `TODO` i `index.
 
 ---
 
-## Publicera gratis (Netlify Drop)
+## Publicera (GitHub Pages – automatiskt)
 
-1. Kör `npm run build`.
-2. Gå till [app.netlify.com/drop](https://app.netlify.com/drop).
-3. Dra hela mappen **`dist`** och släpp den på sidan.
-4. Klart – du får en länk direkt. Skapa ett gratiskonto om du vill behålla sidan och byta adress.
+Sidan ligger på **https://wahazzin.github.io/portfolio/**.
 
-Vill du uppdatera sidan senare: bygg igen och dra in den nya `dist`-mappen under fliken *Deploys* på din sajt.
+Varje gång något pushas till `main` bygger GitHub sidan och publicerar den automatiskt
+(se `.github/workflows/deploy.yml`). Det tar ungefär 1–2 minuter. Du ser hur det går under fliken **Actions** på GitHub.
+
+Första gången måste GitHub Pages slås på:
+
+1. Gå till repot på GitHub → **Settings** → **Pages**.
+2. Under **Build and deployment** → **Source**, välj **GitHub Actions**.
+3. Gå till fliken **Actions**, klicka på **Deploy to GitHub Pages** → **Run workflow** (eller pusha något nytt).
+
+**Vill du hellre använda Netlify Drop?** Ändra `base: '/portfolio/'` till `base: '/'` i `vite.config.js`,
+kör `npm run build` och dra mappen `dist` till [app.netlify.com/drop](https://app.netlify.com/drop).
 
 ---
 
