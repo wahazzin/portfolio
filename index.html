@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yassin Abdelwahab – Hemsidor, Google Ads &amp; automatisering i Malmö</title>
+    <meta
+      name="description"
+      content="Yassin Abdelwahab bygger hemsidor, Google Ads och automatisering för småföretag i Malmö."
+    />
+    <meta name="theme-color" content="#0a0a0b" />
+    <meta property="og:title" content="Yassin Abdelwahab – webbutvecklare i Malmö" />
+    <meta
+      property="og:description"
+      content="Hemsidor, Google Ads och automatisering för småföretag i Malmö."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/src/fonts/bricolage-wght.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!--
+      Intro-logik körs innan sidan ritas, så att varken intro eller hero "blinkar".
+      Introt visas bara första besöket per flik-session och aldrig vid prefers-reduced-motion.
+    -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var seen = false;
+        try { seen = sessionStorage.getItem('ya-intro') === '1'; } catch (e) {}
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!seen && !reduce) d.classList.add('has-intro');
+      })();
+    </script>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Hoppa till innehållet</a>
+
+    <!-- ============================== INTRO / PRELOADER ============================== -->
+    <div class="intro" aria-hidden="true">
+      <div class="intro__name">
+        <span class="intro__line"><span class="intro__word">Yassin</span></span>
+        <span class="intro__line"><span class="intro__word">Abdelwahab</span></span>
+      </div>
+      <div class="intro__meta">
+        <span>Malmö</span>
+        <span class="intro__count"><span class="intro__num">0</span>%</span>
+      </div>
+      <button class="intro__skip" type="button" tabindex="-1">Hoppa över</button>
+    </div>
+
+    <!-- ============================== CUSTOM CURSOR (bara desktop) ============================== -->
+    <div class="cursor" aria-hidden="true">
+      <div class="cursor__dot"></div>
+      <div class="cursor__ring"><span class="cursor__label"></span></div>
+    </div>
+
+    <!-- ============================== HEADER / NAV ============================== -->
+    <header class="header">
+      <a class="header__logo" href="#top" aria-label="Yassin Abdelwahab, till toppen">
+        <span>YA</span>
+      </a>
+      <nav class="header__nav" aria-label="Huvudmeny">
+        <a href="#tjanster" data-magnetic>Tjänster</a>
+        <a href="#projekt" data-magnetic>Projekt</a>
+        <a href="#kontakt" class="header__cta" data-magnetic>Kontakt</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <!-- ============================== HERO ============================== -->
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <!-- Levande bakgrund: WebGL-canvas. Statisk CSS-gradient syns om WebGL saknas. -->
+        <div class="hero__bg" aria-hidden="true">
+          <canvas class="hero__canvas"></canvas>
+        </div>
+
+        <div class="hero__top">
+          <p class="hero__label">Frilansande webbutvecklare</p>
+          <p class="hero__label hero__label--right"><span class="hero__dot" aria-hidden="true"></span> Malmö, kl. <time data-clock data-clock-short>--:--</time></p>
+        </div>
+
+        <h1 class="hero__title" id="hero-title" aria-label="Yassin Abdelwahab">
+          <span class="hero__line" aria-hidden="true"><span class="kinetic" data-kinetic data-kinetic-min="300">Yassin</span></span>
+          <span class="hero__line" aria-hidden="true"><span class="kinetic" data-kinetic data-kinetic-min="300">Abdelwahab</span></span>
+        </h1>
+
+        <div class="hero__bottom">
+          <p class="hero__intro" data-reveal-lines>
+            Jag bygger hemsidor och automatisering för småföretag i Malmö – så att fler hittar dig
+            och du lägger mindre tid på det tråkiga.
+          </p>
+          <a class="btn" href="#kontakt" data-magnetic>
+            <span class="btn__text">Hör av dig</span>
+          </a>
+        </div>
+
+        <div class="hero__scroll" aria-hidden="true">
+          <span>Scrolla</span>
+          <span class="hero__scroll-line"></span>
+        </div>
+      </section>
+
+      <!-- ============================== OM / STATEMENT ============================== -->
+      <section class="statement" aria-label="Om mig">
+        <p class="statement__index">(01) Om mig</p>
+        <p class="statement__text" data-scrub-words>
+          Jag är 18 år och driver min egen verksamhet. Jag gör det enkelt för lokala företag att synas
+          på nätet, få fler förfrågningar och slippa manuellt pappersarbete.
+        </p>
+      </section>
+
+      <!-- ============================== TJÄNSTER ============================== -->
+      <section class="services" id="tjanster" aria-labelledby="services-title">
+        <div class="marquee" aria-hidden="true">
+          <div class="marquee__row" data-marquee="1">
+            <div class="marquee__inner">
+              <span>Hemsidor</span><i></i><span>Google Ads</span><i></i><span>Automatisering</span><i></i>
+            </div>
+          </div>
+          <div class="marquee__row marquee__row--outline" data-marquee="-1">
+            <div class="marquee__inner">
+              <span>Automatisering</span><i></i><span>Hemsidor</span><i></i><span>Google Ads</span><i></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="services__wrap">
+          <div class="services__head">
+            <p class="section-index">(02) Tjänster</p>
+            <h2 class="section-title" id="services-title" data-reveal-lines>Tre saker. Gjorda ordentligt.</h2>
+          </div>
+
+          <ol class="services__list">
+            <li class="service" data-service>
+              <span class="service__num">01</span>
+              <h3 class="service__title">Hemsidor för småföretag</h3>
+              <p class="service__text">Snabba, mobilvänliga sidor som visar vad du gör och gör det lätt att kontakta dig.</p>
+            </li>
+            <li class="service" data-service>
+              <span class="service__num">02</span>
+              <h3 class="service__title">Google Ads</h3>
+              <p class="service__text">Annonser som syns när folk i närheten söker efter just det du erbjuder.</p>
+            </li>
+            <li class="service" data-service>
+              <span class="service__num">03</span>
+              <h3 class="service__title">Automatisering</h3>
+              <p class="service__text">Smarta flöden som tar hand om bokningar, beställningar och upprepade uppgifter.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ============================== PROJEKT ============================== -->
+      <!-- Desktop: fästs (pin) och scrollar horisontellt. Mobil: vertikal lista. -->
+      <section class="projects" id="projekt" aria-labelledby="projects-title">
+        <div class="projects__pin">
+          <div class="projects__track">
+            <div class="projects__intro">
+              <p class="section-index">(03) Projekt</p>
+              <h2 class="section-title" id="projects-title" data-reveal-lines>Utvalt arbete</h2>
+              <p class="projects__lead" data-reveal-lines>
+                Riktiga företag, riktiga kunder. Här är vad jag har byggt och vad jag bygger just nu.
+              </p>
+            </div>
+
+            <!-- ---------- PROJEKT 1: Kunglig Städning ---------- -->
+            <article class="project" data-project style="--hue: 222">
+              <a class="project__media" href="https://kungligstadning.se" target="_blank" rel="noopener"
+                 data-cursor="Visa" aria-label="Besök kungligstadning.se (öppnas i ny flik)">
+                <div class="project__placeholder" aria-hidden="true">
+                  <span class="project__ghost">Kunglig<br />Städning</span>
+                </div>
+                <!--
+                  SKÄRMDUMP: lägg bilden i public/images/kunglig-stadning.jpg
+                  och ta bort kommentar-tecknen runt raden nedan.
+                -->
+                <!-- <img class="project__img" src="images/kunglig-stadning.jpg" alt="Skärmdump av kungligstadning.se" width="1600" height="1000" loading="lazy" decoding="async" /> -->
+              </a>
+              <div class="project__info">
+                <div class="project__row">
+                  <span class="project__num">01</span>
+                  <span class="badge badge--live">Live</span>
+                </div>
+                <h3 class="project__title">Kunglig Städning</h3>
+                <p class="project__kind">Städfirma i Malmö</p>
+                <!-- TODO: ägaren måste bekräfta texten nedan innan sidan publiceras. -->
+                <p class="project__text">Förbättrade hemsidan och satte upp Google Ads.</p>
+                <a class="project__link" href="https://kungligstadning.se" target="_blank" rel="noopener">kungligstadning.se</a>
+              </div>
+            </article>
+
+            <!-- ---------- PROJEKT 2: MO Städservice ---------- -->
+            <article class="project" data-project style="--hue: 168">
+              <div class="project__media">
+                <div class="project__placeholder" aria-hidden="true">
+                  <span class="project__ghost">MO<br />Städservice</span>
+                </div>
+                <!--
+                  SKÄRMDUMP: lägg bilden i public/images/mo-stadservice.jpg
+                  och ta bort kommentar-tecknen runt raden nedan.
+                -->
+                <!-- <img class="project__img" src="images/mo-stadservice.jpg" alt="Skärmdump av MO Städservices hemsida" width="1600" height="1000" loading="lazy" decoding="async" /> -->
+              </div>
+              <div class="project__info">
+                <div class="project__row">
+                  <span class="project__num">02</span>
+                  <!-- TODO: status okänd. Lägg till t.ex. <span class="badge badge--live">Live</span> när det är bekräftat. -->
+                </div>
+                <h3 class="project__title">MO Städservice</h3>
+                <p class="project__kind">Städfirma</p>
+                <!-- TODO: bekräfta texten nedan. Länk okänd: lägg till en <a class="project__link"> när adressen finns. -->
+                <p class="project__text">Byggde hemsidan från grunden.</p>
+              </div>
+            </article>
+
+            <!-- ---------- PROJEKT 3: Pizzeria Tavolino ---------- -->
+            <article class="project" data-project style="--hue: 14">
+              <div class="project__media">
+                <div class="project__placeholder" aria-hidden="true">
+                  <span class="project__ghost">Pizzeria<br />Tavolino</span>
+                </div>
+                <!--
+                  SKÄRMDUMP: lägg bilden i public/images/pizzeria-tavolino.jpg
+                  och ta bort kommentar-tecknen runt raden nedan.
+                -->
+                <!-- <img class="project__img" src="images/pizzeria-tavolino.jpg" alt="Skärmdump av Pizzeria Tavolinos beställningssida" width="1600" height="1000" loading="lazy" decoding="async" /> -->
+              </div>
+              <div class="project__info">
+                <div class="project__row">
+                  <span class="project__num">03</span>
+                  <span class="badge badge--wip">Pågående</span>
+                </div>
+                <h3 class="project__title">Pizzeria Tavolino</h3>
+                <p class="project__kind">Restaurang i Klagstorp</p>
+                <p class="project__text">
+                  Bygger en beställningssida där kunderna beställer direkt, med en skärm i köket för nya beställningar.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================== KONTAKT ============================== -->
+      <section class="contact" id="kontakt" aria-labelledby="contact-title">
+        <p class="section-index">(04) Kontakt</p>
+        <h2 class="contact__title" id="contact-title" data-reveal-lines>Har du ett företag som behöver synas? Skriv till mig.</h2>
+
+        <a class="contact__email" href="mailto:wahazzin@gmail.com" data-cursor="Mejla" aria-label="Mejla wahazzin@gmail.com">
+          <span class="contact__email-part kinetic" data-kinetic data-kinetic-min="600" aria-hidden="true">wahazzin</span><span
+            class="contact__email-part kinetic" data-kinetic data-kinetic-min="600" aria-hidden="true">@gmail.com</span>
+        </a>
+
+        <div class="contact__actions">
+          <button class="btn btn--ghost" type="button" data-copy="wahazzin@gmail.com" data-magnetic>
+            <span class="btn__text">Kopiera mejladressen</span>
+          </button>
+          <a class="btn" href="mailto:wahazzin@gmail.com" data-magnetic>
+            <span class="btn__text">Skicka ett mejl</span>
+          </a>
+          <!--
+            TELEFON (valfritt): ta bort kommentar-tecknen och skriv in numret.
+            <a class="btn btn--ghost" href="tel:+46700000000" data-magnetic><span class="btn__text">070-000 00 00</span></a>
+          -->
+        </div>
+        <p class="contact__status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <!-- ============================== FOOTER ============================== -->
+    <footer class="footer">
+      <p>© <span data-year>2026</span> Yassin Abdelwahab</p>
+      <p>Malmö <time class="footer__time" data-clock>--:--</time></p>
+      <a class="footer__top" href="#top">Till toppen</a>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
