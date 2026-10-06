@@ -20,14 +20,14 @@
 
     <!--
       Intro-logik körs innan sidan ritas, så att varken intro eller hero "blinkar".
-      Introt visas bara första besöket per flik-session och aldrig vid prefers-reduced-motion.
+      Introt visas bara vid allra första besöket (localStorage) och aldrig vid prefers-reduced-motion.
     -->
     <script>
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
         var seen = false;
-        try { seen = sessionStorage.getItem('ya-intro') === '1'; } catch (e) {}
+        try { seen = localStorage.getItem('ya-intro') === '1' || sessionStorage.getItem('ya-intro') === '1'; } catch (e) {}
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!seen && !reduce) d.classList.add('has-intro');
       })();
@@ -131,21 +131,31 @@
             <h2 class="section-title" id="services-title" data-reveal-lines>Tre saker. Gjorda ordentligt.</h2>
           </div>
 
+          <!-- Hela raden är klickbar: den hoppar till Kontakt och fyller i mejlets ämnesrad. -->
           <ol class="services__list">
             <li class="service" data-service>
               <span class="service__num">01</span>
-              <h3 class="service__title">Hemsidor för småföretag</h3>
+              <h3 class="service__title">
+                <button class="service__link" type="button" data-subject="Förfrågan: Hemsida"><span class="service__name">Hemsidor för småföretag</span><span class="sr-only"> – skicka en förfrågan</span></button>
+              </h3>
               <p class="service__text">Snabba, mobilvänliga sidor som visar vad du gör och gör det lätt att kontakta dig.</p>
+              <span class="service__cta" aria-hidden="true">Fråga om detta</span>
             </li>
             <li class="service" data-service>
               <span class="service__num">02</span>
-              <h3 class="service__title">Google Ads</h3>
+              <h3 class="service__title">
+                <button class="service__link" type="button" data-subject="Förfrågan: Google Ads"><span class="service__name">Google Ads</span><span class="sr-only"> – skicka en förfrågan</span></button>
+              </h3>
               <p class="service__text">Annonser som syns när folk i närheten söker efter just det du erbjuder.</p>
+              <span class="service__cta" aria-hidden="true">Fråga om detta</span>
             </li>
             <li class="service" data-service>
               <span class="service__num">03</span>
-              <h3 class="service__title">Automatisering</h3>
+              <h3 class="service__title">
+                <button class="service__link" type="button" data-subject="Förfrågan: Automatisering"><span class="service__name">Automatisering</span><span class="sr-only"> – skicka en förfrågan</span></button>
+              </h3>
               <p class="service__text">Smarta flöden som tar hand om bokningar, beställningar och upprepade uppgifter.</p>
+              <span class="service__cta" aria-hidden="true">Fråga om detta</span>
             </li>
           </ol>
         </div>
@@ -154,6 +164,16 @@
       <!-- ============================== PROJEKT ============================== -->
       <!-- Desktop: fästs (pin) och scrollar horisontellt. Mobil: vertikal lista. -->
       <section class="projects" id="projekt" aria-labelledby="projects-title">
+        <!-- Positionsindikator + föregående/nästa (bara synlig i desktop-galleriet) -->
+        <div class="projects__nav" aria-label="Bläddra bland projekten" role="group">
+          <button class="projects__btn" type="button" data-gallery="prev" aria-label="Föregående projekt">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <p class="projects__count" aria-live="polite"><span data-gallery-current>1</span> / <span data-gallery-total>3</span></p>
+          <button class="projects__btn" type="button" data-gallery="next" aria-label="Nästa projekt">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+        </div>
         <div class="projects__pin">
           <div class="projects__track">
             <div class="projects__intro">
@@ -243,13 +263,19 @@
         <p class="section-index">(04) Kontakt</p>
         <h2 class="contact__title" id="contact-title" data-reveal-lines>Har du ett företag som behöver synas? Skriv till mig.</h2>
 
-        <a class="contact__email" href="mailto:wahazzin@gmail.com" data-cursor="Mejla" aria-label="Mejla wahazzin@gmail.com">
+        <a class="contact__email" href="mailto:wahazzin@gmail.com" data-mailto data-cursor="Mejla" aria-label="Mejla wahazzin@gmail.com">
           <span class="contact__email-part kinetic" data-kinetic data-kinetic-min="600" data-kinetic-wave aria-hidden="true">wahazzin</span><span
             class="contact__email-part kinetic" data-kinetic data-kinetic-min="600" data-kinetic-wave aria-hidden="true">@gmail.com</span>
         </a>
 
+        <!-- Visas när man klickat på en tjänst: ämnesraden som följer med i mejlet -->
+        <p class="contact__subject" hidden>
+          Ämne: <strong class="contact__subject-text"></strong>
+          <button class="contact__subject-clear" type="button">Ta bort ämnet</button>
+        </p>
+
         <div class="contact__actions">
-          <a class="btn" href="mailto:wahazzin@gmail.com" data-magnetic>
+          <a class="btn" href="mailto:wahazzin@gmail.com" data-mailto data-magnetic>
             <span class="btn__text">Skicka ett mejl</span>
           </a>
           <button class="btn btn--ghost" type="button" data-copy="wahazzin@gmail.com" data-magnetic>

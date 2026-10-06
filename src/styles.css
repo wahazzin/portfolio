@@ -386,7 +386,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 .hero__title {
   align-self: start;
-  margin-top: clamp(8px, 4vh, 40px);
+  margin-top: clamp(4px, 1.6vh, 16px); /* mobil: tight under etiketten */
   display: flex;
   flex-direction: column;
   font-weight: 300;
@@ -451,8 +451,7 @@ img { display: block; max-width: 100%; height: auto; }
   display: grid;
   gap: 20px;
 }
-/* "Om mig": basfärgen är läsbar grå (7.6:1); orden lyses upp till benvit när man scrollar */
-.statement__text.is-highlight { color: var(--muted); }
+/* "Om mig": alltid full benvit text. (Desktop: orden lyses upp till vitt + glöd, aldrig mörkare.) */
 .statement__text {
   font-size: clamp(30px, 5.2vw, 80px);
   line-height: 1.04;
@@ -530,9 +529,29 @@ img { display: block; max-width: 100%; height: auto; }
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.035em;
-  transition: translate 0.6s var(--ease-out);
 }
+/* Effekter läggs på .service__name – ALDRIG på rubriken/knappen, annars krymper klickytan */
+.service__name { display: inline-block; transition: translate 0.6s var(--ease-out), scale 0.35s var(--ease-out); }
 .service__title { grid-column: 2; grid-row: 1; }
+.service__link {
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: left;
+  color: inherit;
+}
+/* hela raden blir klickytan */
+.service__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+.service__link:focus-visible { outline: none; }
+.service:has(.service__link:focus-visible) { outline: 2px solid var(--paper); outline-offset: 4px; border-radius: 4px; }
+.service__cta {
+  grid-column: 2;
+  justify-self: start;
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--paper);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 .service__text { grid-column: 2; grid-row: 2; color: var(--muted); max-width: 40ch; font-size: 17px; transition: color 0.3s; }
 
 @media (min-width: 900px) {
@@ -541,12 +560,15 @@ img { display: block; max-width: 100%; height: auto; }
   .service { grid-template-columns: 64px minmax(0, 1fr) minmax(0, 26ch); align-items: baseline; padding: 40px 0; }
   .service__num { grid-row: 1; }
   .service__text { grid-column: 3; grid-row: 1; }
+  .service__cta { grid-column: 3; grid-row: 2; margin-top: 0; }
 }
 @media (hover: hover) and (pointer: fine) {
   .service:hover::before { transform: scaleY(1); transform-origin: top; }
-  .service:hover .service__title { translate: 16px 0; }
+  .service:hover .service__name { translate: 16px 0; }
   .service:hover .service__text,
   .service:hover .service__num { color: var(--cobalt-ink); }
+  .service__cta { opacity: 0.75; transition: opacity 0.3s; }
+  .service:hover .service__cta { opacity: 1; }
 }
 
 /* =====================================================================
@@ -691,6 +713,31 @@ img { display: block; max-width: 100%; height: auto; }
   .project__media:hover .project__phone { translate: 0 -8%; }
 }
 
+/* Galleri-navigering (bara i desktop-läget) */
+.projects { position: relative; }
+.projects__nav { display: none; }
+.is-horizontal .projects__nav {
+  position: absolute;
+  right: var(--gutter);
+  bottom: var(--gutter);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.projects__count { font-family: var(--font-mono); font-size: 14px; min-width: 5ch; text-align: center; font-variant-numeric: tabular-nums; }
+.projects__btn {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  transition: background-color 0.3s, color 0.3s, opacity 0.3s;
+}
+.projects__btn:hover:not(:disabled) { background: var(--cobalt-ink); color: var(--cobalt); }
+.projects__btn:disabled { opacity: 0.35; cursor: default; }
+
 /* Desktop: horisontell, fäst scroll (klassen sätts av JS) */
 .is-horizontal .projects__pin { height: 100vh; display: flex; align-items: center; }
 .is-horizontal .projects__track {
@@ -750,6 +797,20 @@ img { display: block; max-width: 100%; height: auto; }
   .contact__email { font-size: 9.6vw; flex-wrap: nowrap; }
 }
 .contact__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.contact__subject {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  font-size: 17px;
+}
+.contact__subject[hidden] { display: none; }
+.contact__subject-clear {
+  font-size: 15px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 .contact__status { min-height: 1.5em; font-family: var(--font-mono); font-size: 14px; color: var(--paper); }
 
 /* =====================================================================
@@ -765,6 +826,35 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .footer__time { color: var(--paper); font-variant-numeric: tabular-nums; margin-left: 6px; }
 .footer__top { color: var(--paper); text-decoration: underline; text-underline-offset: 4px; }
+
+/* =====================================================================
+   TRYCK-LÄGEN PÅ TOUCH (scale + glöd, bara transform/opacity)
+   ===================================================================== */
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .btn,
+  .project__media,
+  .projects__btn { transition: scale 0.35s var(--ease-out); }
+  .btn:active,
+  .projects__btn:active { scale: 0.95; }
+  .project__media:active { scale: 0.97; }
+  .service:active .service__name { scale: 0.96; }
+  /* glöd inuti knappen */
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.45), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .btn:active::after { opacity: 1; transition-duration: 0.05s; }
+  /* tjänsterad: koboltfyllningen glider in under fingret */
+  .service:active::before { transform: scaleY(1); transform-origin: top; transition-duration: 0.25s; }
+  .service:active .service__text,
+  .service:active .service__num { color: var(--cobalt-ink); }
+}
 
 /* =====================================================================
    REDUCERAD RÖRELSE

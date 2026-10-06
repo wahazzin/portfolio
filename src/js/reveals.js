@@ -2,14 +2,16 @@
 // TEXT-AVSLÖJANDEN – läsbarhet går alltid före effekt.
 // Regler:
 //  - Text animeras bara IN, en gång (once: true). Den göms aldrig igen.
-//  - Mobil (< 768 px): ingen mask. Hela stycket tonas in snabbt (≤ 0.5 s).
-//  - Desktop: rad-för-rad bakom masker, startar tidigt (92 % ner på skärmen)
-//    och är klar långt innan texten når mitten.
+//  - Mobil (< 768 px): INGA intoningar av text alls – texten finns bara där.
+//    (Mobilen får egna effekter i touch.js som aldrig döljer text.)
+//  - Desktop: rad-för-rad bakom masker, startar när texten kommer in i bild
+//    och är klar långt innan den når mitten.
 //  - Ingen scroll-styrd nedtoning av riktig text.
 // [data-reveal-lines]  -> rubriker/stycken
-// [data-scrub-words]   -> "Om mig": orden blir LJUSARE när man scrollar (bas = läsbar grå)
+// [data-scrub-words]   -> "Om mig": full benvit text; orden lyses bara UPP (vit + glöd) på desktop
 // [data-service]       -> tjänsteraderna
 // =====================================================================
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { reduceMotion } from './env.js';
 
 const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
@@ -38,10 +40,7 @@ export function initLineReveals(gsap, SplitText) {
     show(el);
     if (reduceMotion) return;
 
-    if (isMobile()) {
-      fadeIn(gsap, el, el);
-      return;
-    }
+    if (isMobile()) return; // mobil: ingen intoning
 
     let played = false; // spela bara en gång, även om texten delas om vid resize
     SplitText.create(el, {
@@ -65,25 +64,26 @@ export function initLineReveals(gsap, SplitText) {
   });
 }
 
-// "Om mig": basfärgen är --muted (7.6:1 mot bakgrunden, alltid läsbar).
-// Ord för ord blir de ljusare (--paper) när man scrollar. Aldrig mörkare än basen.
+// "Om mig": texten är ALLTID full benvit (--paper, ca 16:1 mot bakgrunden).
+// På desktop lyses orden upp ett i taget till rent vitt med en svag koboltglöd.
+// Effekten kan bara göra orden ljusare – aldrig mörkare än basen, åt något håll.
 export function initScrubWords(gsap, SplitText) {
   document.querySelectorAll('[data-scrub-words]').forEach((el) => {
     show(el);
-    if (reduceMotion) return;
-    el.classList.add('is-highlight');
+    if (reduceMotion || isMobile()) return;
     const split = SplitText.create(el, { type: 'words', wordsClass: 'word', aria: 'none' });
     gsap.to(split.words, {
-      color: '#eeece6',
+      color: '#ffffff',
+      textShadow: '0 0 18px rgba(47, 75, 255, 0.9)',
       ease: 'none',
       stagger: 0.1,
-      scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 55%', scrub: true },
+      scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 50%', scrub: true },
     });
   });
 }
 
 export function initServices(gsap) {
-  if (reduceMotion) return;
+  if (reduceMotion || isMobile()) return; // mobil: tjänsterna syns direkt
   document.querySelectorAll('[data-service]').forEach((row) => fadeIn(gsap, row.children, row));
 }
 
@@ -129,10 +129,37 @@ export function initHero(gsap, kineticGroups, { heroGate }) {
   });
 }
 
-// Kontakt-finalen: mejladressen tonas in en gång och stannar sedan.
-// (Bokstäverna "lever" ändå via den variabla vikten – muspekare på desktop, våg på mobil.)
-export function initContactEmail(gsap) {
+// Kontakt-finalen: när mejladressen kommer in i bild "scramblas" bokstäverna
+// i max 0.6 s och landar sedan på rätt plats – en gång. Länken har aria-label med
+// adressen, så skärmläsare får den direkt, och Kopiera-knappen kopierar alltid rätt.
+export function initContactEmail(gsap, kineticGroups) {
   if (reduceMotion) return;
   const email = document.querySelector('.contact__email');
-  if (email) fadeIn(gsap, email, email);
+  if (!email) return;
+  const chars = kineticGroups.filter((g) => email.contains(g.el)).flatMap((g) => g.chars.map((c) => c.node));
+  const real = chars.map((n) => n.textContent);
+  const pool = 'abcdefghijklmnopqrstuvwxyz';
+  const state = { p: 0 };
+  ScrollTrigger.create({
+    trigger: email,
+    start: 'top 85%',
+    once: true,
+    onEnter: () =>
+      gsap.to(state, {
+        p: 1,
+        duration: 0.6,
+        ease: 'none',
+        onUpdate: () => {
+          chars.forEach((n, i) => {
+            // varje bokstav landar vid sin egen tidpunkt (vänster till höger)
+            const settleAt = 0.25 + (i / chars.length) * 0.75;
+            const ch = state.p >= settleAt || real[i] === '@' || real[i] === '.'
+              ? real[i]
+              : pool[(Math.random() * pool.length) | 0];
+            if (n.textContent !== ch) n.textContent = ch;
+          });
+        },
+        onComplete: () => chars.forEach((n, i) => (n.textContent = real[i])),
+      }),
+  });
 }

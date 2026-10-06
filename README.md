@@ -113,21 +113,29 @@ proffsigt för ett lokalt företag, men ändå djärvt – och det sticker ut fr
 ## Rörelse – vad som händer var
 
 **Grundregel: läsbarhet går alltid före effekter.** Text göms aldrig igen när man scrollar tillbaka,
-och ingen brödtext tonas ner. "Om mig" börjar i läsbar grå och lyses bara *upp* när man scrollar.
+och ingen text tonas ner. "Om mig" är alltid full benvit; på desktop lyses orden bara *upp* (vitt + glöd).
 
-- **Intro** (max ~1,8 s): namnet stiger upp, räknare till 100, sedan torkas ytan uppåt.
-  Klick, tangent eller scroll hoppar över. Visas bara första besöket per flik.
+- **Intro** (≈ 1,45 s): namnet stiger upp, räknare till 100, sedan torkas ytan uppåt.
+  Klick, tangent, scroll eller tryck hoppar över. Visas bara vid allra första besöket (sparas i webbläsaren).
 - **Hero:** stort namn med variabel vikt som reagerar på muspekaren (desktop).
   Bakgrunden är en lätt WebGL-shader som pausar när den inte syns.
-- **Text:** mobil = hela stycket tonas in på 0,3 s så fort det kommer in i bild.
+- **Text:** mobil = ingen intoning alls, texten finns bara där.
   Desktop = rad för rad bakom masker, klart innan texten når mitten av skärmen.
-- **Tjänster:** rullande band (en rad på mobil) som går snabbare när man scrollar.
-- **Projekt:** på desktop fästs sektionen och korten scrollar i sidled; på mobil vanlig lista.
-  Texten under korten animeras inte alls. Muspekaren blir en "Visa"-bubbla över projekt med länk.
+- **Tjänster:** rullande band (en rad på mobil). Varje tjänsterad är klickbar: den hoppar till Kontakt
+  och fyller i mejlets ämnesrad, t.ex. "Förfrågan: Hemsida" (kan tas bort med "Ta bort ämnet").
+- **Projekt:** på desktop fästs sektionen och korten scrollar i sidled, med en räknare (1 / 3) och
+  knappar för föregående/nästa nere till höger. På mobil vanlig lista.
+- **Kontakt:** mejladressen "scramblas" i ca 0,6 s första gången den syns och landar sedan på rätt bokstäver.
+  Skärmläsare och Kopiera-knappen får alltid rätt adress direkt.
 - **Header:** får mörk, suddig bakgrund när man scrollat. Göms efter 60 px nedåt, visas efter 60 px uppåt.
 
-**Mobil:** shadern renderas i lägre upplösning och 30 fps, ingen custom cursor, ingen mjuk-scroll av touch.
-**Reducerad rörelse** (`prefers-reduced-motion`): ingen intro, ingen mjuk scroll, inget rullande band –
+**Bara på telefoner** (de kan inte hovra, så de får egna effekter – `src/js/touch.js`):
+- Namnet i hero sträcks/lutas lite efter hur snabbt man scrollar och lägger sig när man stannar.
+- Projektkorten växer och rätar upp sig när de passerar mitten av skärmen.
+- Knappar, tjänsterader och kort får ett tryck-läge (krymper lite + glöd/koboltfyllning).
+
+Allt rör bara transform/opacity (billigt för mobilen).
+**Reducerad rörelse** (`prefers-reduced-motion`): ingen intro, ingen mjuk scroll, inga rörliga effekter –
 all text syns direkt.
 
 ---
