@@ -265,16 +265,20 @@ img { display: block; max-width: 100%; height: auto; }
 }
 .header.is-hidden { transform: translateY(-110%); }
 .header__logo {
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: -0.04em;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--paper);
-  color: var(--ink);
+  /* textlogga (ordmärke) istället för en rund "profilbild" */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+  white-space: nowrap;
+}
+.header__name--short { display: none; }
+@media (max-width: 520px) {
+  .header__name { display: none; }
+  .header__name--short { display: inline; }
 }
 .header__nav { display: flex; gap: 4px; }
 .header__nav a {
@@ -481,9 +485,11 @@ img { display: block; max-width: 100%; height: auto; }
 .marquee__row--outline i { background: transparent; box-shadow: inset 0 0 0 2px var(--paper); }
 
 .services__wrap { padding: 0 var(--gutter); display: grid; gap: 48px; }
-.services__head { display: grid; gap: 16px; }
+.services__head { display: grid; gap: 16px; container-type: inline-size; }
+/* Rubriken skalar efter sin egen kolumn (cqi) och kan aldrig sticka in under tjänsteraderna */
+.services__head .section-title { font-size: min(clamp(40px, 7.4vw, 112px), 17cqi); }
 
-.services__list { border-top: 1px solid var(--line); }
+.services__list { border-top: 1px solid var(--line); container-type: inline-size; }
 .service {
   position: relative;
   display: grid;
@@ -518,8 +524,16 @@ img { display: block; max-width: 100%; height: auto; }
 @media (min-width: 900px) {
   .services__wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); align-items: start; }
   .services__head { position: sticky; top: calc(var(--header-h) + 24px); }
-  .service { grid-template-columns: 64px minmax(0, 1fr) minmax(0, 26ch); align-items: baseline; padding: 40px 0; }
+  .service { padding: 40px 0; }
+  /* hover-fyllningen stannar i radernas egen kolumn (går aldrig in under rubriken) */
+  .service::before { inset: 0 calc(var(--gutter) * -1) 0 -20px; }
+}
+/* Titel och beskrivning bredvid varandra bara när listan är bred nog.
+   Titelns storlek räknas från listans bredd så att det alltid finns ett mellanrum. */
+@container (min-width: 700px) {
+  .service { grid-template-columns: 64px minmax(0, 1fr) minmax(0, 26ch); align-items: baseline; }
   .service__num { grid-row: 1; }
+  .service__title { font-size: clamp(30px, calc((100cqi - 360px) / 8), 72px); }
   .service__text { grid-column: 3; grid-row: 1; }
 }
 @media (hover: hover) and (pointer: fine) {
