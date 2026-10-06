@@ -20,16 +20,14 @@
 
     <!--
       Intro-logik körs innan sidan ritas, så att varken intro eller hero "blinkar".
-      Introt visas bara första besöket per flik-session och aldrig vid prefers-reduced-motion.
+      Introt visas vid VARJE sidladdning (men aldrig vid prefers-reduced-motion).
     -->
     <script>
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
-        var seen = false;
-        try { seen = sessionStorage.getItem('ya-intro') === '1'; } catch (e) {}
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!seen && !reduce) d.classList.add('has-intro');
+        if (!reduce) d.classList.add('has-intro');
       })();
     </script>
     <link rel="stylesheet" href="/src/styles.css" />
@@ -47,7 +45,6 @@
         <span>Malmö</span>
         <span class="intro__count"><span class="intro__num">0</span>%</span>
       </div>
-      <button class="intro__skip" type="button" tabindex="-1">Hoppa över</button>
     </div>
 
     <!-- ============================== CUSTOM CURSOR (bara desktop) ============================== -->
@@ -170,14 +167,11 @@
               <a class="project__media" href="https://kungligstadning.se" target="_blank" rel="noopener"
                  data-cursor="Visa">
                 <span class="sr-only">Besök kungligstadning.se (öppnas i ny flik)</span>
-                <div class="project__placeholder" aria-hidden="true">
-                  <span class="project__ghost">Kunglig<br />Städning</span>
-                </div>
-                <!--
-                  SKÄRMDUMP: lägg bilden i public/images/kunglig-stadning.jpg
-                  och ta bort kommentar-tecknen runt raden nedan.
-                -->
-                <!-- <img class="project__img" src="/images/kunglig-stadning.jpg" alt="Skärmdump av kungligstadning.se" width="1600" height="1000" loading="lazy" decoding="async" /> -->
+                <!-- Skärmdump: mobilversionen på telefoner, desktopversionen annars (public/images/) -->
+                <picture>
+                  <source media="(max-width: 767px)" srcset="/images/kunglig-stadning-mobile.webp" width="600" height="1298" />
+                  <img class="project__img" src="/images/kunglig-stadning-desktop.webp" alt="Skärmdump av kungligstadning.se" width="1440" height="900" loading="lazy" decoding="async" />
+                </picture>
               </a>
               <div class="project__info">
                 <div class="project__row">
@@ -192,45 +186,18 @@
               </div>
             </article>
 
-            <!-- ---------- PROJEKT 2: MO Städservice ---------- -->
-            <article class="project" data-project style="--hue: 168">
+            <!-- ---------- PROJEKT 2: Pizzeria Tavolino ---------- -->
+            <article class="project" data-project style="--hue: 8">
               <div class="project__media">
-                <div class="project__placeholder" aria-hidden="true">
-                  <span class="project__ghost">MO<br />Städservice</span>
-                </div>
-                <!--
-                  SKÄRMDUMP: lägg bilden i public/images/mo-stadservice.jpg
-                  och ta bort kommentar-tecknen runt raden nedan.
-                -->
-                <!-- <img class="project__img" src="/images/mo-stadservice.jpg" alt="Skärmdump av MO Städservices hemsida" width="1600" height="1000" loading="lazy" decoding="async" /> -->
+                <!-- Skärmdump: mobilversionen på telefoner, desktopversionen annars (public/images/) -->
+                <picture>
+                  <source media="(max-width: 767px)" srcset="/images/pizzeria-tavolino-mobile.webp" width="600" height="1298" />
+                  <img class="project__img" src="/images/pizzeria-tavolino-desktop.webp" alt="Skärmdump av Pizzeria Tavolinos beställningssida" width="1440" height="900" loading="lazy" decoding="async" />
+                </picture>
               </div>
               <div class="project__info">
                 <div class="project__row">
                   <span class="project__num">02</span>
-                  <!-- TODO: status okänd. Lägg till t.ex. <span class="badge badge--live">Live</span> när det är bekräftat. -->
-                </div>
-                <h3 class="project__title">MO Städservice</h3>
-                <p class="project__kind">Städfirma</p>
-                <!-- TODO: bekräfta texten nedan. Länk okänd: lägg till en <a class="project__link"> när adressen finns. -->
-                <p class="project__text">Byggde hemsidan från grunden.</p>
-              </div>
-            </article>
-
-            <!-- ---------- PROJEKT 3: Pizzeria Tavolino ---------- -->
-            <article class="project" data-project style="--hue: 8">
-              <div class="project__media">
-                <div class="project__placeholder" aria-hidden="true">
-                  <span class="project__ghost">Pizzeria<br />Tavolino</span>
-                </div>
-                <!--
-                  SKÄRMDUMP: lägg bilden i public/images/pizzeria-tavolino.jpg
-                  och ta bort kommentar-tecknen runt raden nedan.
-                -->
-                <!-- <img class="project__img" src="/images/pizzeria-tavolino.jpg" alt="Skärmdump av Pizzeria Tavolinos beställningssida" width="1600" height="1000" loading="lazy" decoding="async" /> -->
-              </div>
-              <div class="project__info">
-                <div class="project__row">
-                  <span class="project__num">03</span>
                   <span class="badge badge--wip">Pågående</span>
                 </div>
                 <h3 class="project__title">Pizzeria Tavolino</h3>
