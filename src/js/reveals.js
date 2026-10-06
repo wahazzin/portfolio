@@ -20,7 +20,34 @@ const START = 'top bottom';
 const MASK_START = 'top 96%';
 
 // Enkel, snabb intoning (mobil + allt som inte ska maskas)
+// Mobil: en IntersectionObserver startar den strax innan elementet kommer in nedtill
+// på skärmen (mäts live – kan aldrig bli fel av ändrade höjder), klar inom 0.6 s.
 export function fadeIn(gsap, targets, trigger, opts = {}) {
+  if (trigger && isMobile()) {
+    const tween = gsap.from(targets, {
+      opacity: 0,
+      y: 12,
+      duration: 0.3,
+      ease: 'power2.out',
+      stagger: 0.04,
+      clearProps: 'opacity,transform',
+      paused: true,
+      ...opts,
+    });
+    // rootMargin: startar redan en halv skärmhöjd INNAN elementet syns,
+    // så intoningen alltid är klar när texten når läsytan – även vid snabb scroll.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect(); // en gång – göms aldrig igen
+          tween.play();
+        }
+      },
+      { rootMargin: '0px 0px 50% 0px' }
+    );
+    io.observe(trigger);
+    return tween;
+  }
   return gsap.from(targets, {
     opacity: 0,
     y: 12,

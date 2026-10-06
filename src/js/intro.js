@@ -1,8 +1,8 @@
 // =====================================================================
 // INTRO / PRELOADER (max ~1.8 s)
 // Namnet stiger upp bakom masker, en räknare går till 100, sen torkas
-// hela ytan uppåt och hero tar över. Klick/tangent hoppar över.
-// Visas bara första besöket i fliken (sessionStorage).
+// hela ytan uppåt och hero tar över. Tryck, klick, tangent eller scroll hoppar över.
+// Visas vid varje sidladdning.
 // =====================================================================
 
 export function runIntro(gsap, onReveal) {
@@ -26,9 +26,6 @@ export function runIntro(gsap, onReveal) {
 
   const finish = () => {
     root.classList.remove('has-intro');
-    try {
-      sessionStorage.setItem('ya-intro', '1');
-    } catch (e) {}
     cleanup();
   };
 
@@ -55,8 +52,10 @@ export function runIntro(gsap, onReveal) {
     window.removeEventListener('keydown', skip);
     intro.removeEventListener('click', skip);
     window.removeEventListener('wheel', skip);
+    window.removeEventListener('touchstart', skip);
   };
   window.addEventListener('keydown', skip);
   intro.addEventListener('click', skip);
   window.addEventListener('wheel', skip, { passive: true });
+  window.addEventListener('touchstart', skip, { passive: true });
 }

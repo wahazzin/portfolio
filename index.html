@@ -20,16 +20,14 @@
 
     <!--
       Intro-logik körs innan sidan ritas, så att varken intro eller hero "blinkar".
-      Introt visas bara första besöket per flik-session och aldrig vid prefers-reduced-motion.
+      Introt visas vid VARJE sidladdning (men aldrig vid prefers-reduced-motion).
     -->
     <script>
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
-        var seen = false;
-        try { seen = sessionStorage.getItem('ya-intro') === '1'; } catch (e) {}
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!seen && !reduce) d.classList.add('has-intro');
+        if (!reduce) d.classList.add('has-intro');
       })();
     </script>
     <link rel="stylesheet" href="/src/styles.css" />
