@@ -15,8 +15,6 @@ import { initMarquee } from './js/marquee.js';
 import { initProjects } from './js/projects.js';
 import { initCursor, initMagnetic } from './js/cursor.js';
 import { initCopy, initClock } from './js/contact.js';
-import { initServiceLinks } from './js/services.js';
-import { initTouchEffects } from './js/touch.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -28,13 +26,6 @@ if (!reduceMotion) {
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 }
-
-// Gemensam mjuk scroll till ett element eller en y-position (respekterar reducerad rörelse)
-const scrollToTarget = (target) => {
-  if (lenis) lenis.scrollTo(target, { duration: 1.2 });
-  else if (typeof target === 'number') window.scrollTo(0, target);
-  else target.scrollIntoView();
-};
 
 // Ankarlänkar (#projekt osv.) scrollar mjukt och flyttar fokus för tangentbordet
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -96,10 +87,8 @@ const start = () => {
   initLineReveals(gsap, SplitText);
   initScrubWords(gsap, SplitText);
   initServices(gsap);
-  initServiceLinks(scrollToTarget);
-  initProjects(gsap, scrollToTarget);
-  initContactEmail(gsap, kinetic);
-  if (!finePointer && !reduceMotion) initTouchEffects(gsap, ScrollTrigger);
+  initProjects(gsap);
+  initContactEmail(gsap);
   if (!reduceMotion) initMarquee(gsap, ScrollTrigger);
   if (finePointer && !reduceMotion) {
     initCursor(gsap);
@@ -108,8 +97,6 @@ const start = () => {
   initCopy();
   initClock();
   ScrollTrigger.refresh();
-  // bilder/typsnitt kan ändra höjder efter start – räkna om triggerpositionerna
-  window.addEventListener('load', () => ScrollTrigger.refresh());
 };
 
 // Vänta på typsnitten så att raduppdelning och mått blir rätt (men max 1.5 s)

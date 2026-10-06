@@ -1,8 +1,8 @@
 // =====================================================================
-// INTRO / PRELOADER (max ~1.45 s)
+// INTRO / PRELOADER (max ~1.8 s)
 // Namnet stiger upp bakom masker, en räknare går till 100, sen torkas
 // hela ytan uppåt och hero tar över. Klick/tangent hoppar över.
-// Visas bara vid allra första besöket (localStorage), aldrig vid upprepade besök.
+// Visas bara första besöket i fliken (sessionStorage).
 // =====================================================================
 
 export function runIntro(gsap, onReveal) {
@@ -27,28 +27,25 @@ export function runIntro(gsap, onReveal) {
   const finish = () => {
     root.classList.remove('has-intro');
     try {
-      localStorage.setItem('ya-intro', '1');
-    } catch (e) {}
-    try {
       sessionStorage.setItem('ya-intro', '1');
     } catch (e) {}
     cleanup();
   };
 
   const tl = gsap.timeline({ onComplete: finish });
-  tl.fromTo(words, { y: 0, yPercent: 105 }, { yPercent: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06 }, 0)
+  tl.fromTo(words, { y: 0, yPercent: 105 }, { yPercent: 0, duration: 0.85, ease: 'expo.out', stagger: 0.08 }, 0)
     .to(counter, {
       v: 100,
-      duration: 0.85,
+      duration: 1.1,
       ease: 'power2.inOut',
       onUpdate: () => (num.textContent = Math.round(counter.v)),
     }, 0)
-    .to(words, { yPercent: -110, duration: 0.45, ease: 'expo.in', stagger: 0.03 }, 0.8)
+    .to(words, { yPercent: -110, duration: 0.55, ease: 'expo.in', stagger: 0.04 }, 1.0)
     .fromTo(intro,
       { clipPath: 'inset(0% 0% 0% 0%)' },
-      { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.6, ease: 'expo.inOut' },
-      0.85)
-    .call(reveal, null, 1.0); // totalt ≈ 1.45 s
+      { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.7, ease: 'expo.inOut' },
+      1.1)
+    .call(reveal, null, 1.3);
 
   // Hoppa över: spola snabbt fram (inte ett hårt klipp)
   const skip = () => {
@@ -58,10 +55,8 @@ export function runIntro(gsap, onReveal) {
     window.removeEventListener('keydown', skip);
     intro.removeEventListener('click', skip);
     window.removeEventListener('wheel', skip);
-    window.removeEventListener('touchstart', skip);
   };
   window.addEventListener('keydown', skip);
   intro.addEventListener('click', skip);
   window.addEventListener('wheel', skip, { passive: true });
-  window.addEventListener('touchstart', skip, { passive: true });
 }
