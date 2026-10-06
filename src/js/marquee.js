@@ -8,11 +8,10 @@ export function initMarquee(gsap, ScrollTrigger) {
   const rows = [...document.querySelectorAll('[data-marquee]')];
   if (!rows.length) return;
 
-  const tracks = rows.filter((row) => row.offsetWidth > 0).map((row) => {
-    // (dolda rader, t.ex. andra raden på mobil, hoppas över)
+  const tracks = rows.map((row) => {
     const inner = row.querySelector('.marquee__inner');
     // klona tills raden är minst dubbelt så bred som skärmen
-    const clones = Math.min(12, Math.max(2, Math.ceil((window.innerWidth * 2) / Math.max(1, inner.offsetWidth)) + 1));
+    const clones = Math.max(2, Math.ceil((window.innerWidth * 2) / inner.offsetWidth) + 1);
     for (let i = 1; i < clones; i++) row.appendChild(inner.cloneNode(true));
     const items = row.querySelectorAll('.marquee__inner');
     return { row, items, dir: Number(row.dataset.marquee), x: 0, w: inner.offsetWidth };
@@ -33,7 +32,7 @@ export function initMarquee(gsap, ScrollTrigger) {
     },
   });
 
-  window.addEventListener('resize', () => tracks.forEach((t) => (t.w = t.items[0].offsetWidth || t.w)));
+  window.addEventListener('resize', () => tracks.forEach((t) => (t.w = t.items[0].offsetWidth)));
 
   gsap.ticker.add((time, delta) => {
     if (!active) return;
@@ -41,7 +40,7 @@ export function initMarquee(gsap, ScrollTrigger) {
     const speed = (0.06 + boost * 0.12) * delta; // px per ms
     tracks.forEach((t) => {
       t.x -= speed * t.dir * direction;
-      if (t.w) t.x = gsap.utils.wrap(-t.w, 0, t.x);
+      t.x = gsap.utils.wrap(-t.w, 0, t.x);
       gsap.set(t.items, { x: t.x, force3D: true });
     });
   });

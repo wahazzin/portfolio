@@ -43,32 +43,13 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
   });
 });
 
-// ---------- Header ----------
-// - Får en solid, suddig bakgrund så fort sidan har scrollats (ligger aldrig "naket" över text).
-// - Göms först efter 60 px nedåt och visas först efter 60 px uppåt (inga ryck vid små rörelser).
+// ---------- Header: göms när man scrollar ner, visas när man scrollar upp ----------
 const header = document.querySelector('.header');
-const THRESHOLD = 60;
-let anchorY = window.scrollY;
-let hidden = false;
-const onScroll = () => {
-  const y = window.scrollY;
-  header.classList.toggle('is-solid', y > 10);
-  if (y < 120) {
-    hidden = false;
-    anchorY = y;
-  } else if (!hidden && y - anchorY > THRESHOLD) {
-    hidden = true;
-    anchorY = y;
-  } else if (hidden && anchorY - y > THRESHOLD) {
-    hidden = false;
-    anchorY = y;
-  } else if ((hidden && y > anchorY) || (!hidden && y < anchorY)) {
-    anchorY = y; // fortsätter åt samma håll: flytta referenspunkten
-  }
-  header.classList.toggle('is-hidden', hidden);
-};
-window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
+ScrollTrigger.create({
+  start: 0,
+  end: 'max',
+  onUpdate: (self) => header.classList.toggle('is-hidden', self.direction === 1 && self.scroll() > 200),
+});
 
 // ---------- Intro -> hero ----------
 let openGate;
@@ -84,11 +65,11 @@ const start = () => {
   initHeroBg(document.querySelector('.hero__canvas'), gsap);
   const kinetic = initKinetic(gsap);
   initHero(gsap, kinetic, { heroGate });
-  initLineReveals(gsap, SplitText);
+  initLineReveals(gsap, SplitText, { heroGate });
   initScrubWords(gsap, SplitText);
   initServices(gsap);
   initProjects(gsap);
-  initContactEmail(gsap);
+  initContactEmail(gsap, kinetic);
   if (!reduceMotion) initMarquee(gsap, ScrollTrigger);
   if (finePointer && !reduceMotion) {
     initCursor(gsap);
